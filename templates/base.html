@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Rean Cloud{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{% block description %}Rean Cloud - Your reliable cloud platform{% endblock %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f1419;
+            --bg-secondary: #1a1f2e;
+            --bg-card: #242a38;
+            --text-primary: #f1f3f4;
+            --text-secondary: #a8b3cf;
+            --accent-primary: #00d4ff;
+            --accent-secondary: #0095ff;
+            --border-color: #2d3748;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 4px;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background: rgba(36, 42, 56, 0.95) !important;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            color: var(--text-primary) !important;
+            font-weight: 700;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            color: var(--accent-primary) !important;
+            transform: translateY(-2px);
+        }
+
+        .navbar-brand .logo {
+            height: 45px;
+            width: 45px;
+            margin-right: 12px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 4px 8px rgba(0, 212, 255, 0.3));
+        }
+
+        .navbar-brand:hover .logo {
+            transform: rotate(5deg) scale(1.05);
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--text-secondary) !important;
+            font-weight: 500;
+            margin: 0 8px;
+            padding: 10px 16px !important;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .navbar-nav .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .navbar-nav .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            color: var(--accent-primary) !important;
+            background: rgba(0, 212, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .navbar-nav .nav-link.active {
+            font-weight: 600;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .navbar-nav .nav-link i {
+            margin-right: 6px;
+            font-size: 0.9rem;
+        }
+
+        /* Dropdown Styles */
+        .dropdown-menu {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(20px);
+            margin-top: 8px;
+        }
+
+        .dropdown-item {
+            color: var(--text-secondary);
+            padding: 10px 16px;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--accent-primary);
+        }
+
+        /* Button Styles */
+        .btn-outline-primary {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-link {
+            color: var(--text-secondary) !important;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-link:hover {
+            color: var(--accent-primary) !important;
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(20px);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Container improvements */
+        .container {
+            max-width: 1200px;
+        }
+
+        /* User avatar placeholder */
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            margin-left: 8px;
+        }
+
+        /* Mobile responsive improvements */
+        @media (max-width: 991px) {
+            .navbar-nav {
+                background: var(--bg-card);
+                border-radius: 12px;
+                margin-top: 16px;
+                padding: 16px;
+                box-shadow: var(--shadow);
+            }
+            
+            .navbar-nav .nav-link {
+                margin: 4px 0;
+            }
+        }
+
+        /* Loading animation for logo */
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .logo.loading {
+            animation: pulse 2s infinite;
+        }
+
+        /* Notification badge */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <!-- Method 1: Using static files (recommended) -->
+                {% load static %}
+                <img src="{% static 'images/logo.png' %}" alt="Rean Cloud Logo" class="logo">
+                
+                <!-- Method 2: Alternative fallback if static doesn't work -->
+                <!-- <img src="media/logo.png" alt="Rean Cloud Logo" class="logo"> -->
+                
+                <!-- Method 3: External URL fallback -->
+                <!-- <img src="https://cdn-icons-png.flaticon.com/512/4144/4144437.png" alt="Rean Cloud Logo" class="logo"> -->
+                
+                <span>Rean Cloud</span>
+            </a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars text-light"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">
+                            <i class="fas fa-home"></i>Home
+                        </a>
+                    </li>
+                    
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">
+                                <i class="fas fa-tachometer-alt"></i>Dashboard
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'services' %}active{% endif %}" href="#">
+                                <i class="fas fa-cloud"></i>Services
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'storage' %}active{% endif %}" href="#">
+                                <i class="fas fa-hdd"></i>Storage
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link position-relative {% if request.resolver_match.url_name == 'notifications' %}active{% endif %}" href="#">
+                                <i class="fas fa-bell"></i>Notifications
+                                <!-- Uncomment if you have notifications -->
+                                <!-- <span class="notification-badge">3</span> -->
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle"></i>
+                                <span class="ms-1">{{ user.username|title }}</span>
+                                <div class="user-avatar ms-2">
+                                    {{ user.username|first|upper }}
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="fas fa-user me-2"></i>Profile</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-credit-card me-2"></i>Billing</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form action="{% url 'logout' %}" method="post" class="d-inline w-100">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="#">
+                                <i class="fas fa-info-circle"></i>About
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'pricing' %}active{% endif %}" href="#">
+                                <i class="fas fa-tags"></i>Pricing
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="#">
+                                <i class="fas fa-envelope"></i>Contact
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}" href="{% url 'login' %}">
+                                <i class="fas fa-sign-in-alt"></i>Login
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="btn btn-outline-primary ms-2" href="{% url 'register' %}">
+                                <i class="fas fa-user-plus me-1"></i>Get Started
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mt-4">
+        {% if messages %}
+            <div class="row">
+                <div class="col-12">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Add smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Add loading state to logo
+        window.addEventListener('load', function() {
+            const logo = document.querySelector('.logo');
+            if (logo) {
+                logo.classList.remove('loading');
+            }
+        });
+
+        // Auto-hide alerts after 5 seconds
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

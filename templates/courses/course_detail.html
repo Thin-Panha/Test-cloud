@@ -1,0 +1,606 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(135deg, #0f1419 0%, #1a2332 50%, #0f1419 100%);
+        color: #e0e6ed;
+        font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+        min-height: 100vh;
+    }
+
+    .course-hero {
+        background: linear-gradient(135deg, rgba(20, 184, 230, 0.15) 0%, rgba(20, 184, 230, 0.05) 100%);
+        padding: 60px 0;
+        margin-bottom: 40px;
+        border-radius: 0 0 32px 32px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .course-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(20,184,230,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        opacity: 0.3;
+    }
+
+    .hero-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 60px;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    @media (max-width: 968px) {
+        .hero-content {
+            grid-template-columns: 1fr;
+            gap: 40px;
+            text-align: center;
+        }
+    }
+
+    .hero-text h1 {
+        font-size: 3rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #14b8e6 0%, #0ea5e9 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 24px;
+        line-height: 1.2;
+    }
+
+    @media (max-width: 768px) {
+        .hero-text h1 {
+            font-size: 2.2rem;
+        }
+    }
+
+    .course-meta {
+        display: flex;
+        gap: 24px;
+        margin-bottom: 32px;
+        flex-wrap: wrap;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        background: rgba(15, 20, 25, 0.6);
+        padding: 12px 20px;
+        border-radius: 50px;
+        border: 1px solid rgba(20, 184, 230, 0.3);
+    }
+
+    .meta-icon {
+        width: 20px;
+        height: 20px;
+        margin-right: 8px;
+        color: #14b8e6;
+    }
+
+    .price-tag {
+        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        color: #1f2937;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+
+    .course-description {
+        font-size: 1.2rem;
+        line-height: 1.6;
+        color: #94a3b8;
+        margin-bottom: 32px;
+    }
+
+    .hero-image {
+        position: relative;
+    }
+
+    .course-image {
+        width: 100%;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease;
+    }
+
+    .course-image:hover {
+        transform: scale(1.02);
+    }
+
+    .image-overlay {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .course-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px 60px;
+    }
+
+    .content-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 40px;
+        margin-bottom: 40px;
+    }
+
+    @media (max-width: 968px) {
+        .content-grid {
+            grid-template-columns: 1fr;
+            gap: 32px;
+        }
+    }
+
+    .main-content {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    .section-card {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(20, 184, 230, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .section-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #14b8e6, #0ea5e9, #0284c7);
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    .section-icon {
+        width: 32px;
+        height: 32px;
+        margin-right: 16px;
+        color: #14b8e6;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #f1f5f9;
+        margin: 0;
+    }
+
+    .section-count {
+        background: rgba(20, 184, 230, 0.2);
+        color: #14b8e6;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-left: auto;
+    }
+
+    .lessons-grid {
+        display: grid;
+        gap: 16px;
+    }
+
+    .lesson-item {
+        background: rgba(15, 20, 25, 0.6);
+        border: 1px solid rgba(148, 163, 184, 0.1);
+        border-radius: 16px;
+        padding: 24px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .lesson-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(20, 184, 230, 0.1), transparent);
+        transition: left 0.6s ease;
+    }
+
+    .lesson-item:hover {
+        background: rgba(20, 184, 230, 0.08);
+        border-color: rgba(20, 184, 230, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(20, 184, 230, 0.1);
+    }
+
+    .lesson-item:hover::before {
+        left: 100%;
+    }
+
+    .lesson-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .lesson-number {
+        background: linear-gradient(135deg, #14b8e6, #0ea5e9);
+        color: white;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.9rem;
+        margin-right: 16px;
+    }
+
+    .lesson-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #f1f5f9;
+        margin: 0;
+        flex: 1;
+    }
+
+    .lesson-content {
+        color: #94a3b8;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .quiz-list {
+        display: grid;
+        gap: 16px;
+    }
+
+    .quiz-item {
+        background: rgba(15, 20, 25, 0.6);
+        border: 1px solid rgba(148, 163, 184, 0.1);
+        border-radius: 16px;
+        transition: all 0.3s ease;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .quiz-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.1), transparent);
+        transition: left 0.6s ease;
+    }
+
+    .quiz-item:hover {
+        background: rgba(16, 185, 129, 0.08);
+        border-color: rgba(16, 185, 129, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(16, 185, 129, 0.1);
+    }
+
+    .quiz-item:hover::before {
+        left: 100%;
+    }
+
+    .quiz-link {
+        display: flex;
+        align-items: center;
+        padding: 24px;
+        text-decoration: none;
+        color: inherit;
+        position: relative;
+        z-index: 1;
+    }
+
+    .quiz-icon {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 16px;
+    }
+
+    .quiz-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #f1f5f9;
+        margin: 0;
+        flex: 1;
+    }
+
+    .quiz-arrow {
+        width: 20px;
+        height: 20px;
+        color: #10b981;
+        transition: transform 0.3s ease;
+    }
+
+    .quiz-item:hover .quiz-arrow {
+        transform: translateX(4px);
+    }
+
+    .sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .stats-card {
+        background: linear-gradient(135deg, rgba(20, 184, 230, 0.1) 0%, rgba(20, 184, 230, 0.05) 100%);
+        border: 1px solid rgba(20, 184, 230, 0.3);
+        border-radius: 20px;
+        padding: 24px;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-top: 16px;
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #14b8e6;
+        margin-bottom: 4px;
+    }
+
+    .stat-label {
+        color: #94a3b8;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+
+    .enroll-card {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border-radius: 20px;
+        padding: 32px;
+        text-align: center;
+        color: white;
+        box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+    }
+
+    .enroll-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 16px;
+    }
+
+    .enroll-btn {
+        background: white;
+        color: #059669;
+        border: none;
+        padding: 16px 32px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+    .enroll-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #64748b;
+        font-style: italic;
+    }
+
+    .empty-icon {
+        width: 48px;
+        height: 48px;
+        margin: 0 auto 16px;
+        opacity: 0.5;
+    }
+
+    /* Animation for cards */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .section-card {
+        animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .section-card:nth-child(2) {
+        animation-delay: 0.1s;
+    }
+</style>
+
+<div class="course-hero">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1>{{ course.title }}</h1>
+            
+            <div class="course-meta">
+                <div class="meta-item">
+                    <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253"/>
+                    </svg>
+                    <span>{{ lessons|length }} Lesson{{ lessons|length|pluralize }}</span>
+                </div>
+                <div class="meta-item">
+                    <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>{{ quizzes|length }} Quiz{{ quizzes|length|pluralize }}</span>
+                </div>
+                <div class="meta-item price-tag">
+                    <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                    </svg>
+                    <span>${{ course.price }}</span>
+                </div>
+            </div>
+            
+            <p class="course-description">{{ course.description }}</p>
+        </div>
+        
+        <div class="hero-image">
+            {% if course.image %}
+                <img class="course-image" src="{{ course.image.url }}" alt="{{ course.title }}">
+                <div class="image-overlay">Course Preview</div>
+            {% else %}
+                <div class="course-image" style="background: linear-gradient(135deg, #14b8e6, #0ea5e9); display: flex; align-items: center; justify-content: center; min-height: 300px; color: white; font-size: 1.2rem; font-weight: 600;">
+                    {{ course.title }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="course-container">
+    <div class="content-grid">
+        <div class="main-content">
+            <!-- Lessons Section -->
+            <div class="section-card">
+                <div class="section-header">
+                    <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                    </svg>
+                    <h2 class="section-title">Course Lessons</h2>
+                    <span class="section-count">{{ lessons|length }}</span>
+                </div>
+                
+                {% if lessons %}
+                    <div class="lessons-grid">
+                        {% for lesson in lessons %}
+                            <div class="lesson-item">
+                                <div class="lesson-header">
+                                    <div class="lesson-number">{{ forloop.counter }}</div>
+                                    <h3 class="lesson-title">{{ lesson.title }}</h3>
+                                </div>
+                                <p class="lesson-content">{{ lesson.content|truncatewords:30 }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <svg class="empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253"/>
+                        </svg>
+                        <p>No lessons available for this course yet.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Quizzes Section -->
+            <div class="section-card">
+                <div class="section-header">
+                    <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <h2 class="section-title">Practice Quizzes</h2>
+                    <span class="section-count">{{ quizzes|length }}</span>
+                </div>
+                
+                {% if quizzes %}
+                    <div class="quiz-list">
+                        {% for quiz in quizzes %}
+                            <div class="quiz-item">
+                                <a href="{% url 'take_quiz' quiz.id %}" class="quiz-link">
+                                    <div class="quiz-icon">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                    </div>
+                                    <h3 class="quiz-title">{{ quiz.title }}</h3>
+                                    <svg class="quiz-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <svg class="empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <p>No quizzes available for this course yet.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <!-- Course Stats -->
+            <div class="stats-card">
+                <h3 style="color: #14b8e6; margin: 0 0 16px 0; font-size: 1.2rem;">Course Overview</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">{{ lessons|length }}</div>
+                        <div class="stat-label">Lessons</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ quizzes|length }}</div>
+                        <div class="stat-label">Quizzes</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enrollment Card -->
+            <div class="enroll-card">
+                <h3 class="enroll-title">Completed the course?</h3>
+                <p style="margin-bottom: 24px; opacity: 0.9;">Recieve your certification now with just 80% of full score and you will pass.!!.</p>
+                <button class="enroll-btn">Scadual Exam Now!</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
