@@ -3,13 +3,18 @@
 # Exit on any error
 set -e
 
-# Fetch the public IP address from EC2 metadata
-PUBLIC_IP=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)
+# Get the public IP address of the server
+PUBLIC_IP=$(curl -s http://ifconfig.me)
 
-# Check if PUBLIC_IP was successfully retrieved
+# Check if public IP was retrieved successfully
 if [ -z "$PUBLIC_IP" ]; then
-    echo "Error: Could not retrieve public IP address. Ensure this is running on an EC2 instance with a public IP."
-    exit 1
+    echo "Error: Could not retrieve public IP address from ifconfig.me"
+    echo "Please enter the public IP address manually (e.g., 18.141.225.2):"
+    read -r PUBLIC_IP
+    if [ -z "$PUBLIC_IP" ]; then
+        echo "Error: No IP address provided. Exiting."
+        exit 1
+    fi
 fi
 
 # Define the path to settings.py
